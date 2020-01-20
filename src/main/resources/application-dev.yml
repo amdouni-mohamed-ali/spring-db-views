@@ -1,0 +1,31 @@
+# H2
+# The database gui url : http://localhost:8080/h2
+spring:
+  #  h2:
+  #    console:
+  #      enabled: true
+  #    path: /h2
+
+  # Data source
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    platform: h2
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: validate
+      # validate the schema, makes no changes to the database.
+    show-sql: true
+
+#logging
+logging:
+  level:
+    .: error
+    org.springframework: INFO
+    com.spring.example.springdbviews: DEBUG
+    #show hibernate requests and values
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
