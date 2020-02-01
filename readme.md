@@ -48,15 +48,57 @@ If everything turns out alright, you should end up with this result :
 [INFO] ------------------------------------------------------------------------
 ```
 
-## Running the tests
+## Overview
 
-We are using a travis job to run tests before merging branches. Each tme we create a merge request, travis will download our code and run the tests after.
+In this example we will create our jpa entities model for ou views. First of all, check our database model below :
 
-You can check the travis file to know more or just check this link :
+![db-diagram](https://user-images.githubusercontent.com/16627692/73593645-9dee9380-4506-11ea-9f6d-f2050edc0e13.jpg)
 
-- https://docs.travis-ci.com/user/languages/java/#examples
+As we can see, a customer can have one or more account but only one address. And now have a look of our model views :
 
-For unit tests, you gonna find them in each module + some explanations in the source code also.
+* Customer view :
+```sql
+CREATE VIEW view_customer
+AS
+SELECT id, first_name, last_name, email, phone_number FROM customer;
+```
+
+* Address view :
+```sql
+CREATE VIEW view_address
+AS
+SELECT c.id as identifier, first_name, building, street, country FROM customer c INNER JOIN address a WHERE c.id = a.customer_id;
+```
+
+* Account view :
+```sql
+CREATE VIEW view_account
+AS
+SELECT c.id as identifier, first_name, balance, account_name, date_opened FROM customer c INNER JOIN account a WHERE c.id = a.customer_id;
+```
+
+As jpa treats views as tables, it's easy to implement these views as java classes and add the @Entity annotation to them. Well, that's not the case here because
+this model contains a lot of issues that prevent use from using jpa as it is.
+
+The customer view is awesome because it contains a unique id (the customer id), but that's not the case for the address and account views. These views does not contains
+ids. 
+
+For the address view, If we decide to make the customer id a primary key we can't be sure if an address can be shared between two customers.
+
+The same issue for the account view, we can't make the customer id a primary key because a customer can have many accounts so the primary key is not unique.
+
+The solution is to modify the views by :
+- adding the address pk and the accounts pk so we can make composite keys (customer pk, address pk) for the address view and (customer pk, account pk) for the accounts
+- or we can add our custom pk. The row number for example can be a pk (if you are using oracle as database). check this article for more details :
+https://tuhrig.de/using-spring-data-for-database-views-without-an-id/
+
+But as we can't modify the views, we will use a third solution. But in my opinion, if you can modify the views use one of the last solution because this one is a little
+complicated. The solution is to use the @Embeddable and @Embedded annotations in the customer entity.
+
+So we will make the account and the address entities embeddable and we will embed them in the customer entity. Please check the entity package to see the example
+and check this article to know more about these annotations :
+
+- https://en.wikibooks.org/wiki/Java_Persistence/Embeddables
 
 ## Built With
 

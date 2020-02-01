@@ -42,8 +42,7 @@ public class Customer {
     })
     private Address address;
 
-    //TODO : change the  fetch to lazy. at the moment we have this error : failed to lazily initialize a collection of role: org.spring.tutorial.examples.jpa.databaseviews.entity.Customer.accounts, could not initialize proxy - no Session
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     /*
      * JPA 2.0 defines an ElementCollection mapping. It is meant to handle several non-standard relationship mappings. An ElementCollection can be used to
      * define a one-to-many relationship to an Embeddable object.
