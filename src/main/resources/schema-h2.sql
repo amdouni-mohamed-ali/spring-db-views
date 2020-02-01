@@ -47,13 +47,13 @@ AS
 SELECT c.id as identifier, first_name, balance, account_name, date_opened FROM customer c INNER JOIN account a WHERE c.id = a.customer_id;
 
 -- there is some problems in this views if we are dealing with jpa (jpa needs an id for any entity)
--- in the view_customer view we have a primary key si it's OK
--- in the view_address we haven't an id not an unique identifier. the customer may have many addresses so
+-- in the view_customer view we have a primary key . it's the id.
+-- in the view_address the id is not an unique identifier. the customer may have many addresses so
 -- the customer id is not a primary key for this entity
 -- we can use a composite key like (id, first_name, building, street, country all fields :)) but it's not a solution
 -- if one of the fields is null we gonna have problems with hibernate
 -- as first solution (and if you can modify the views) you can add the row number as primary key. if you are dealing
--- with oracle you can check this https://tuhrig.de/using-spring-data-for-database-views-without-an-id/
+-- with oracle you can check this post https://tuhrig.de/using-spring-data-for-database-views-without-an-id/
 -- as second solution :
 -- check the example :)
 -- we suppose that a customer can have only one address and many accounts

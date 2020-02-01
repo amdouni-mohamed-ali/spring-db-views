@@ -2,7 +2,3 @@
 spring:
   profiles:
     active: dev
-
-#server port
-#server:
-#  port: 8090

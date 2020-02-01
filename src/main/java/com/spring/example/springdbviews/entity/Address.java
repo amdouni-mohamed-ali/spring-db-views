@@ -1,6 +1,7 @@
 package com.spring.example.springdbviews.entity;
 
 import javax.persistence.Embeddable;
+import java.util.Objects;
 
 @Embeddable
 /*
@@ -21,32 +22,36 @@ public class Address {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public Address setFirstName(String firstName) {
         this.firstName = firstName;
+        return this;
     }
 
     public String getBuilding() {
         return building;
     }
 
-    public void setBuilding(String building) {
+    public Address setBuilding(String building) {
         this.building = building;
+        return this;
     }
 
     public String getStreet() {
         return street;
     }
 
-    public void setStreet(String street) {
+    public Address setStreet(String street) {
         this.street = street;
+        return this;
     }
 
     public String getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public Address setCountry(String country) {
         this.country = country;
+        return this;
     }
 
     @Override
@@ -57,5 +62,21 @@ public class Address {
                 ", street='" + street + '\'' +
                 ", country='" + country + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(firstName, address.firstName) &&
+                Objects.equals(building, address.building) &&
+                Objects.equals(street, address.street) &&
+                Objects.equals(country, address.country);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, building, street, country);
     }
 }
