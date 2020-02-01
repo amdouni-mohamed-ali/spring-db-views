@@ -54,7 +54,7 @@ In this example we will create our jpa entities model for ou views. First of all
 
 ![db-diagram](https://user-images.githubusercontent.com/16627692/73593645-9dee9380-4506-11ea-9f6d-f2050edc0e13.jpg)
 
-As we can see, a customer can have one or more account but only one address. And now have a look of our model views :
+As we can see, a customer can have one or more account but only one address. And now have a look at our views model:
 
 * Customer view :
 ```sql
@@ -78,21 +78,22 @@ SELECT c.id as identifier, first_name, balance, account_name, date_opened FROM c
 ```
 
 As jpa treats views as tables, it's easy to implement these views as java classes and add the @Entity annotation to them. Well, that's not the case here because
-this model contains a lot of issues that prevent use from using jpa as it is.
+this model contains a lot of issues that prevent us from using jpa as it is.
 
-The customer view is awesome because it contains a unique id (the customer id), but that's not the case for the address and account views. These views does not contains
+The customer view is awesome because it contains a unique id (the customer id), but that's not the case for the address and account views. These views does not contain
 ids. 
 
-For the address view, If we decide to make the customer id a primary key we can't be sure if an address can be shared between two customers.
+For the address view, If we decide to make the customer id a primary key we can have problems. Imagine the case when a user does not have an address, so the
+id will be null and hibernate will fail in this case.
 
-The same issue for the account view, we can't make the customer id a primary key because a customer can have many accounts so the primary key is not unique.
+For the account view, we can't make the customer id a primary key because a customer can have many accounts so the primary key is not unique.
 
 The solution is to modify the views by :
 - adding the address pk and the accounts pk so we can make composite keys (customer pk, address pk) for the address view and (customer pk, account pk) for the accounts
 - or we can add our custom pk. The row number for example can be a pk (if you are using oracle as database). check this article for more details :
 https://tuhrig.de/using-spring-data-for-database-views-without-an-id/
 
-But as we can't modify the views, we will use a third solution. But in my opinion, if you can modify the views use one of the last solution because this one is a little
+But as we can't modify the views, we will use a third solution. But in my opinion, if you can modify the views use one of the last solutions because this one is a little
 complicated. The solution is to use the @Embeddable and @Embedded annotations in the customer entity.
 
 So we will make the account and the address entities embeddable and we will embed them in the customer entity. Please check the entity package to see the example
@@ -112,4 +113,5 @@ and check this article to know more about these annotations :
 
 * **Amdouni Mohamed Ali** [[github](https://github.com/amdouni-mohamed-ali)]
 
-![Spring_framework-1](https://user-images.githubusercontent.com/16627692/72637378-7671c580-3961-11ea-8d00-3f5624480783.png)
+![JPAHibernate](https://user-images.githubusercontent.com/16627692/73594283-36881200-450d-11ea-8cdb-ab042e681784.jpg)
+
